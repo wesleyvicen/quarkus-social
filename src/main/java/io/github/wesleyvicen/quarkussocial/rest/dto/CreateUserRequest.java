@@ -1,28 +1,17 @@
 package io.github.wesleyvicen.quarkussocial.rest.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 public class CreateUserRequest {
 
     @NotBlank(message = "Name is Required")
     private String name;
     @NotNull(message = "Age is Required")
     private Integer age;
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
 }
