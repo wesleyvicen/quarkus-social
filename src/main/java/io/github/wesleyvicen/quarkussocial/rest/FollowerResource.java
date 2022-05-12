@@ -6,6 +6,7 @@ import io.github.wesleyvicen.quarkussocial.domain.repository.UserRepository;
 import io.github.wesleyvicen.quarkussocial.rest.dto.FollowerRequest;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -24,17 +25,22 @@ public class FollowerResource {
     }
 
     @PUT
+    @Transactional
     public Response followersUser(@PathParam("userId") Long userId, FollowerRequest request){
        var user = userRepository.findById(userId);
        if(user == null){
            return Response.status(Response.Status.NOT_FOUND).build();
        }
        var follower = userRepository.findById(request.getFollowerId());
-       var entity = new Follower();
-       entity.setUser(user);
-       entity.setFallower(follower);
+        var followers = repository.follower(follower, user);
 
-       repository.persist(entity);
+        if(!followers){
+            var entity = new Follower();
+            entity.setUser(user);
+            entity.setFollower(follower);
+
+            repository.persist(entity);
+        }
 
        return Response.status(Response.Status.NO_CONTENT).build();
     }
